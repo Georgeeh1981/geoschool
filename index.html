@@ -3,21 +3,194 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GEOSCHOOL</title>
+    <title>Back of House Ops</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
-    <!-- Global styles -->
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <main class="container">
-      <h1>Welcome to GEOSCHOOL</h1>
-      <p>Your cloud-based educational platform.</p>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">BOH</span>
+        <div class="brand-text">
+          <p class="eyebrow">Prototype</p>
+          <h1>Back of House Ops</h1>
+        </div>
+      </div>
+      <nav class="header-actions">
+        <a class="ghost-btn" href="docs/backlog.md" target="_blank">Backlog</a>
+        <a class="ghost-btn" href="docs/ui-maquetas.md" target="_blank">Maquetas</a>
+        <a class="primary-btn" href="login.html">Entrar</a>
+      </nav>
+    </header>
 
-      <!-- Now it's a real link to login.html -->
-      <a href="login.html" class="primary-btn">Go to Login</a>
+    <main class="app-shell">
+      <section class="panel shift-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Horarios</p>
+            <h2>Planificador semanal</h2>
+            <p class="muted">Publica turnos, asigna responsables y lleva control de cambios.</p>
+          </div>
+          <div class="inline-controls">
+            <label class="chip">
+              Ubicación
+              <select id="locationFilter">
+                <option value="all">Todas</option>
+                <option value="Cocina Central">Cocina Central</option>
+                <option value="Sala Norte">Sala Norte</option>
+              </select>
+            </label>
+            <label class="chip">
+              Estado
+              <select id="statusFilter">
+                <option value="all">Todos</option>
+                <option value="Publicado">Publicado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Cambiado">Cambiado</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="shift-grid">
+          <form id="shiftForm" class="card shift-form">
+            <div>
+              <label for="employee">Empleado</label>
+              <input id="employee" name="employee" type="text" placeholder="Ana Pérez" required />
+            </div>
+            <div class="dual-input">
+              <label for="role">Rol</label>
+              <input id="role" name="role" type="text" placeholder="Cocina" required />
+            </div>
+            <div class="dual-input">
+              <label for="start">Inicio</label>
+              <input id="start" name="start" type="time" required />
+            </div>
+            <div class="dual-input">
+              <label for="end">Fin</label>
+              <input id="end" name="end" type="time" required />
+            </div>
+            <div>
+              <label for="day">Día</label>
+              <select id="day" name="day" required>
+                <option value="Lun">Lunes</option>
+                <option value="Mar">Martes</option>
+                <option value="Mié">Miércoles</option>
+                <option value="Jue">Jueves</option>
+                <option value="Vie">Viernes</option>
+                <option value="Sáb">Sábado</option>
+                <option value="Dom">Domingo</option>
+              </select>
+            </div>
+            <div>
+              <label for="location">Ubicación</label>
+              <select id="location" name="location" required>
+                <option value="Cocina Central">Cocina Central</option>
+                <option value="Sala Norte">Sala Norte</option>
+              </select>
+            </div>
+            <div>
+              <label for="status">Estado</label>
+              <select id="status" name="status" required>
+                <option value="Publicado">Publicado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Cambiado">Cambiado</option>
+              </select>
+            </div>
+            <button type="submit" class="primary-btn full-width">Agregar turno</button>
+            <p class="helper">Los cambios se mantienen localmente para este prototipo.</p>
+          </form>
+
+          <div class="card shift-board">
+            <div class="shift-table-head">
+              <span>Día</span>
+              <span>Turno</span>
+              <span>Ubicación</span>
+              <span>Asignado</span>
+              <span>Estado</span>
+            </div>
+            <div id="shiftList" class="shift-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel clock-messages">
+        <div class="card clock-card">
+          <div class="panel-head compact">
+            <div>
+              <p class="eyebrow">Fichaje</p>
+              <h3>Check-in / Check-out</h3>
+              <p class="muted">Controla entradas y salidas con validación básica.</p>
+            </div>
+            <div class="status-dot" id="clockStatus">Fuera de turno</div>
+          </div>
+          <div class="clock-body">
+            <div class="clock-row">
+              <div>
+                <p class="eyebrow">Próximo turno</p>
+                <p id="nextShift">08:00 - 16:00 · Cocina Central</p>
+              </div>
+              <button id="clockBtn" class="primary-btn">Iniciar turno</button>
+            </div>
+            <div class="clock-row">
+              <div>
+                <p class="eyebrow">Validación</p>
+                <p id="clockMessage">Listo para fichar cuando inicie tu ventana.</p>
+              </div>
+              <div class="chip success" id="clockWindow">En ventana</div>
+            </div>
+          </div>
+          <div class="history">
+            <div class="history-head">
+              <p class="eyebrow">Historial reciente</p>
+              <button id="clearHistory" class="ghost-btn">Limpiar</button>
+            </div>
+            <ul id="clockHistory"></ul>
+          </div>
+        </div>
+
+        <div class="card messaging-card">
+          <div class="panel-head compact">
+            <div>
+              <p class="eyebrow">Mensajería</p>
+              <h3>Equipo y tablón</h3>
+            </div>
+            <input id="messageSearch" type="search" placeholder="Buscar" />
+          </div>
+          <div class="messaging-body">
+            <aside class="channel-list" id="channelList"></aside>
+            <div class="thread">
+              <div class="thread-header">
+                <div>
+                  <p class="eyebrow">Canal activo</p>
+                  <h4 id="activeChannel">Turnos · Cocina</h4>
+                </div>
+                <span class="chip info" id="channelMeta">5 miembros · Notificaciones activas</span>
+              </div>
+              <div id="messageThread" class="message-thread"></div>
+              <form id="messageForm" class="message-form">
+                <input
+                  id="messageInput"
+                  type="text"
+                  placeholder="Escribe un anuncio o mensaje corto"
+                  required
+                />
+                <button type="submit" class="primary-btn">Enviar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Main script -->
+    <footer class="app-footer">
+      <p class="muted">
+        Este prototipo es el punto de partida para el software completo: horarios, fichaje y comunicación interna.
+        Conecta con tu backend preferido para persistencia y autenticación.
+      </p>
+    </footer>
+
     <script src="js/main.js"></script>
   </body>
 </html>
